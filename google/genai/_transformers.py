@@ -183,6 +183,11 @@ def t_extract_models(
     return response.get('tunedModels')
   elif response.get('publisherModels') is not None:
     return response.get('publisherModels')
+  elif (
+      response.get('httpHeaders') is not None
+      and response.get('jsonPayload') is None
+  ):
+    return []
   else:
     raise ValueError('Cannot determine the models type.')
 
