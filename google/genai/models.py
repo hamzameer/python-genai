@@ -4817,6 +4817,13 @@ class Models(_api_module.BaseModule):
           if not function_map:
             yield chunk
           else:
+            if (
+                not chunk
+                or not chunk.candidates
+                or not chunk.candidates[0].content
+                or not chunk.candidates[0].content.parts
+            ):
+              break
             func_response_parts = _extra_utils.get_function_response_parts(
                 chunk, function_map
             )
@@ -4831,19 +4838,16 @@ class Models(_api_module.BaseModule):
                 automatic_function_calling_history
             )
           yield chunk
+        if (
+            not chunk
+            or not chunk.candidates
+            or not chunk.candidates[0].content
+            or not chunk.candidates[0].content.parts
+        ):
+          break
         func_response_parts = _extra_utils.get_function_response_parts(
             chunk, function_map
         )
-
-      if not chunk:
-        break
-      if (
-          not chunk
-          or not chunk.candidates
-          or not chunk.candidates[0].content
-          or not chunk.candidates[0].content.parts
-      ):
-        break
 
       if not function_map:
         break
@@ -5950,6 +5954,7 @@ class AsyncModels(_api_module.BaseModule):
           f'AFC is enabled with max remote calls: {remaining_remote_calls_afc}.'
       )
       automatic_function_calling_history = []
+      func_response_parts = None
       chunk = None
       i = 0
       while remaining_remote_calls_afc > 0:
@@ -5974,6 +5979,13 @@ class AsyncModels(_api_module.BaseModule):
             if not function_map:
               yield chunk
             else:
+              if (
+                  not chunk
+                  or not chunk.candidates
+                  or not chunk.candidates[0].content
+                  or not chunk.candidates[0].content.parts
+              ):
+                break
               func_response_parts = _extra_utils.get_function_response_parts(
                   chunk, function_map
               )
@@ -5989,18 +6001,16 @@ class AsyncModels(_api_module.BaseModule):
                   automatic_function_calling_history
               )
             yield chunk
+          if (
+              not chunk
+              or not chunk.candidates
+              or not chunk.candidates[0].content
+              or not chunk.candidates[0].content.parts
+          ):
+            break
           func_response_parts = _extra_utils.get_function_response_parts(
               chunk, function_map
           )
-        if not chunk:
-          break
-        if (
-            not chunk
-            or not chunk.candidates
-            or not chunk.candidates[0].content
-            or not chunk.candidates[0].content.parts
-        ):
-          break
         if not function_map:
           break
 

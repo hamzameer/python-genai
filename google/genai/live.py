@@ -20,7 +20,7 @@ import base64
 import contextlib
 import json
 import logging
-from typing import AsyncIterator, Optional, Sequence, Union
+from typing import AsyncIterator, Dict, Optional, Sequence, Union
 
 import google.auth
 from websockets import ConnectionClosed
@@ -72,15 +72,17 @@ class AsyncSession:
   async def send(
       self,
       *,
-      input: Union[
-          types.ContentListUnion,
-          types.ContentListUnionDict,
-          types.LiveClientContentOrDict,
-          types.LiveClientRealtimeInputOrDict,
-          types.LiveClientToolResponseOrDict,
-          types.FunctionResponseOrDict,
-          Sequence[types.FunctionResponseOrDict],
-      ],
+      input: Optional[
+          Union[
+              types.ContentListUnion,
+              types.ContentListUnionDict,
+              types.LiveClientContentOrDict,
+              types.LiveClientRealtimeInputOrDict,
+              types.LiveClientToolResponseOrDict,
+              types.FunctionResponseOrDict,
+              Sequence[types.FunctionResponseOrDict],
+          ]
+      ] = None,
       end_of_turn: Optional[bool] = False,
   ):
     """Send input to the model.
@@ -234,7 +236,7 @@ class AsyncSession:
   def _LiveServerContent_from_mldev(
       self,
       from_object: Union[dict, object],
-  ) -> dict:
+  ) -> Dict[str, object]:
     to_object = {}
     if getv(from_object, ['modelTurn']) is not None:
       setv(
@@ -254,7 +256,7 @@ class AsyncSession:
   def _LiveToolCall_from_mldev(
       self,
       from_object: Union[dict, object],
-  ) -> dict:
+  ) -> Dict[str, object]:
     to_object = {}
     if getv(from_object, ['functionCalls']) is not None:
       setv(
@@ -267,7 +269,7 @@ class AsyncSession:
   def _LiveToolCall_from_vertex(
       self,
       from_object: Union[dict, object],
-  ) -> dict:
+  ) -> Dict[str, object]:
     to_object = {}
     if getv(from_object, ['functionCalls']) is not None:
       setv(
@@ -280,7 +282,7 @@ class AsyncSession:
   def _LiveServerMessage_from_mldev(
       self,
       from_object: Union[dict, object],
-  ) -> dict:
+  ) -> Dict[str, object]:
     to_object = {}
     if getv(from_object, ['serverContent']) is not None:
       setv(
@@ -307,7 +309,7 @@ class AsyncSession:
   def _LiveServerContent_from_vertex(
       self,
       from_object: Union[dict, object],
-  ) -> dict:
+  ) -> Dict[str, object]:
     to_object = {}
     if getv(from_object, ['modelTurn']) is not None:
       setv(
@@ -327,7 +329,7 @@ class AsyncSession:
   def _LiveServerMessage_from_vertex(
       self,
       from_object: Union[dict, object],
-  ) -> dict:
+  ) -> Dict[str, object]:
     to_object = {}
     if getv(from_object, ['serverContent']) is not None:
       setv(
@@ -354,18 +356,24 @@ class AsyncSession:
 
   def _parse_client_message(
       self,
-      input: Union[
-          types.ContentListUnion,
-          types.ContentListUnionDict,
-          types.LiveClientContentOrDict,
-          types.LiveClientRealtimeInputOrDict,
-          types.LiveClientRealtimeInputOrDict,
-          types.LiveClientToolResponseOrDict,
-          types.FunctionResponseOrDict,
-          Sequence[types.FunctionResponseOrDict],
-      ],
+      input: Optional[
+          Union[
+              types.ContentListUnion,
+              types.ContentListUnionDict,
+              types.LiveClientContentOrDict,
+              types.LiveClientRealtimeInputOrDict,
+              types.LiveClientRealtimeInputOrDict,
+              types.LiveClientToolResponseOrDict,
+              types.FunctionResponseOrDict,
+              Sequence[types.FunctionResponseOrDict],
+          ]
+      ] = None,
       end_of_turn: Optional[bool] = False,
-  ) -> dict:
+  ) -> Dict[str, object]:
+
+    if not input:
+      logging.info('No input provided. Assume it is the end of turn.')
+      return {'client_content': {'turn_complete': True}}
     if isinstance(input, str):
       input = [input]
     elif isinstance(input, dict) and 'data' in input:
