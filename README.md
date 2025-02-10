@@ -39,6 +39,12 @@ client = genai.Client(
 )
 ```
 
+### Select API Version
+
+By default, the SDK uses the beta API endpoints provided by Google to support
+experimental features in the APIs. The stable API endpoints can be selected by
+setting the API version to `v1`.
+
 To set the API version use `http_options`. For example, to set the API version
 to `v1` for Vertex AI:
 
@@ -1066,3 +1072,4 @@ delete_job = client.batches.delete(name=job.name)
 
 delete_job
 ```
+
