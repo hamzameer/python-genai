@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.2.0](https://github.com/googleapis/python-genai/compare/v1.1.0...v1.2.0) (2025-02-11)
+
+
+### Features
+
+* Enable Media resolution for Gemini API. ([6cdf61d](https://github.com/googleapis/python-genai/commit/6cdf61d09f0dec0b27f2be6a0487ec5f4792d62f))
+
+
+### Bug Fixes
+
+* Default to list base models for async models list ([d3226b7](https://github.com/googleapis/python-genai/commit/d3226b7ce9fde115e503da7f9108d735fc89325c))
+* Remove Type import from types.py that get's shadowed by API Type type. (fixes [#310](https://github.com/googleapis/python-genai/issues/310)) ([78f58c3](https://github.com/googleapis/python-genai/commit/78f58c3f63ec1d9fb916e81f9b962d5b65b13ec2))
+* Use typing_extensions.TypedDict for TypedDict types (fixes [#189](https://github.com/googleapis/python-genai/issues/189)) ([996562a](https://github.com/googleapis/python-genai/commit/996562afed6d19b20bef343262e4c8820559c2d6))
+
+
+### Documentation
+
+* Client initialization using environmental variables. ([e4c2ffc](https://github.com/googleapis/python-genai/commit/e4c2ffcdb5ddd68ded5f3e2b98c0b44afe91ca1b))
+
 ## [1.1.0](https://github.com/googleapis/python-genai/compare/v1.0.0...v1.1.0) (2025-02-10)
 
 
